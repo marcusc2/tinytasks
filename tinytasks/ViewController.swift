@@ -11,11 +11,12 @@ import UIKit
 class TinyTasksItem: Object {
     @objc dynamic var item: String = ""
     @objc dynamic var date: Date = Date()
+    let tasks = List<String>()
 }
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
 
-    @IBOutlet var table: UITableView!
+    @IBOutlet var tableView: UITableView!
 
     private let realm = try! Realm()
     private var data = [TinyTasksItem]()
@@ -24,22 +25,36 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         
         data = realm.objects(TinyTasksItem.self).map({ $0 })
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        table.delegate = self
-        table.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Projects"
     }
 
-    // Mark: Table
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+    @IBAction func didTapAddButton() {
+        guard let vc = storyboard?.instantiateViewController(identifier: "enter") as? EntryViewController else {
+            return
+        }
+        vc.completionHandler = { [weak self] in
+            self?.refresh()
+        }
+        vc.title = "New Project"
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = data[indexPath.row].item
-        return cell
+    func refresh() {
+        data = realm.objects(TinyTasksItem.self).map({ $0 })
+        tableView.reloadData()
     }
 
+}
+
+extension ViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
@@ -58,26 +73,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Projects"
+}
+
+extension ViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
     }
 
-    @IBAction func didTapAddButton() {
-        guard let vc = storyboard?.instantiateViewController(identifier: "enter") as? EntryViewController else {
-            return
-        }
-        vc.completionHandler = { [weak self] in
-            self?.refresh()
-        }
-        vc.title = "New Item"
-        vc.navigationItem.largeTitleDisplayMode = .never
-        navigationController?.pushViewController(vc, animated: true)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = data[indexPath.row].item
+        return cell
     }
-
-    func refresh() {
-        data = realm.objects(TinyTasksItem.self).map({ $0 })
-        table.reloadData()
-    }
-
+    
 }
 

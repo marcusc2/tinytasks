@@ -36,10 +36,13 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
         if let text = textField.text, !text.isEmpty {
             let date = datePicker.date
             
+            let tasks : [String] = [text,"Learn French","Do Laundry"]
+            
             realm.beginWrite()
             
             let newItem = TinyTasksItem()
             newItem.date = date
+            newItem.tasks.append(objectsIn: tasks)
             newItem.item = text
             realm.add(newItem)
             try! realm.commitWrite()
@@ -51,6 +54,7 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
             print("Add something")
         }
     }
+    
     
 
 }

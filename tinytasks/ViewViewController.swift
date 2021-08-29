@@ -15,6 +15,7 @@ class ViewViewController: UIViewController {
 
     @IBOutlet var itemLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var tableView: UITableView!
 
     private let realm = try! Realm()
 
@@ -26,6 +27,13 @@ class ViewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // **
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.dataSource = self
+        
+        // **
 
         itemLabel.text = item?.item
         dateLabel.text = Self.dateFormatter.string(from: item!.date)
@@ -48,4 +56,18 @@ class ViewViewController: UIViewController {
     }
     
 
+}
+
+extension ViewViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return item!.tasks.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = item?.tasks[indexPath.row]
+        return cell
+    }
+    
 }
