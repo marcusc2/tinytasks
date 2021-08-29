@@ -11,7 +11,11 @@ import UIKit
 class TinyTasksItem: Object {
     @objc dynamic var item: String = ""
     @objc dynamic var date: Date = Date()
-    let tasks = List<String>()
+    let tasks = List<TinyTask>()
+}
+
+class TinyTask: Object {
+    @objc dynamic var task: String = ""
 }
 
 class ViewController: UIViewController {

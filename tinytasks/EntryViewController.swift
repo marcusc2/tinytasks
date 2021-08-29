@@ -36,7 +36,9 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
         if let text = textField.text, !text.isEmpty {
             let date = datePicker.date
             
-            let tasks : [String] = [text,"Learn French","Do Laundry"]
+            let taskToAdd = TinyTask()
+            taskToAdd.task = "Skydive"
+            let tasks : [TinyTask] = [taskToAdd]
             
             realm.beginWrite()
             
