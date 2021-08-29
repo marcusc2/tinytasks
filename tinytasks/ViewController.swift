@@ -4,16 +4,13 @@
 //
 //  Created by Marcus Christerson on 8/4/21.
 //
+
 import RealmSwift
 import UIKit
 
-class TinyTasksProject: Object {
-    @objc dynamic var name: String = ""
-    @objc dynamic var userDescription: String = ""
+class TinyTasksItem: Object {
+    @objc dynamic var item: String = ""
     @objc dynamic var date: Date = Date()
-    
-    @IBOutlet var table: UITableView!
-    @objc public var data = [TinyTasksProject]()
 }
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -21,12 +18,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet var table: UITableView!
 
     private let realm = try! Realm()
-    private var data = [TinyTasksProject]()
+    private var data = [TinyTasksItem]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        data = realm.objects(TinyTasksProject.self).map({ $0 })
+        data = realm.objects(TinyTasksItem.self).map({ $0 })
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         table.delegate = self
         table.dataSource = self
@@ -39,7 +36,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = data[indexPath.row].name
+        cell.textLabel?.text = data[indexPath.row].item
         return cell
     }
 
@@ -48,7 +45,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         let item = data[indexPath.row]
 
-        guard let vc = storyboard?.instantiateViewController(identifier: "view") as? ProjectViewController else {
+        guard let vc = storyboard?.instantiateViewController(identifier: "view") as? ViewViewController else {
             return
         }
 
@@ -57,7 +54,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self?.refresh()
         }
         vc.navigationItem.largeTitleDisplayMode = .never
-        vc.title = item.name
+        vc.title = item.item
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -72,14 +69,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         vc.completionHandler = { [weak self] in
             self?.refresh()
         }
-        vc.title = "Create Project"
+        vc.title = "New Item"
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }
 
     func refresh() {
-        data = realm.objects(TinyTasksProject.self).map({ $0 })
+        data = realm.objects(TinyTasksItem.self).map({ $0 })
         table.reloadData()
     }
 
 }
+

@@ -15,8 +15,6 @@ class ViewViewController: UIViewController {
 
     @IBOutlet var itemLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
-    
-    @IBOutlet var tableView: UITableView!
 
     private let realm = try! Realm()
 
@@ -28,19 +26,6 @@ class ViewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        /* -------
-        
-        data = realm.objects(TinyTasksItem.self).map({ $0 })
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        // ------- */
-        
-        
 
         itemLabel.text = item?.item
         dateLabel.text = Self.dateFormatter.string(from: item!.date)
