@@ -118,6 +118,25 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DA8-Ju-HwW">
+                                <rect key="frame" x="0.0" y="657" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Title" id="L2O-Yn-IHG">
+                                        <barButtonItem key="rightBarButtonItem" title="Add" id="rfT-8A-fti">
+                                            <connections>
+                                                <action selector="didTapSaveButton" destination="JVA-2F-f29" id="ZeE-fN-wAW"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G7O-vz-cUB">
+                                <rect key="frame" x="159" y="726" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ip5-5E-R7K"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -130,10 +149,15 @@
                             <constraint firstItem="ip5-5E-R7K" firstAttribute="trailing" secondItem="gqt-4E-Xox" secondAttribute="trailing" constant="20" id="pda-IQ-AJg"/>
                         </constraints>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="Item" id="7L8-da-zJ2"/>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="dateLabel" destination="gqt-4E-Xox" id="oP7-NN-XWM"/>
                         <outlet property="itemLabel" destination="J6l-8h-eqm" id="x93-20-4mq"/>
                         <outlet property="tableView" destination="NlK-Gn-QxS" id="d4M-BB-p0L"/>
+                        <outlet property="textField" destination="G7O-vz-cUB" id="rZI-ZO-G5D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HeT-bu-NzO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

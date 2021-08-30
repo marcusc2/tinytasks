@@ -36,15 +36,15 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
         if let text = textField.text, !text.isEmpty {
             let date = datePicker.date
             
-            let taskToAdd = TinyTask()
-            taskToAdd.task = "Skydive"
-            let tasks : [TinyTask] = [taskToAdd]
+//            let taskToAdd = TinyTask()
+//            taskToAdd.task = "Skydive"
+//            let tasks : [TinyTask] = [taskToAdd]
             
             realm.beginWrite()
             
             let newItem = TinyTasksItem()
             newItem.date = date
-            newItem.tasks.append(objectsIn: tasks)
+            //newItem.tasks.append(objectsIn: tasks)
             newItem.item = text
             realm.add(newItem)
             try! realm.commitWrite()

@@ -13,6 +13,7 @@ class ViewViewController: UIViewController {
     public var item: TinyTasksItem?
     public var deletionHandler: (() -> Void)?
 
+    @IBOutlet var textField: UITextField!
     @IBOutlet var itemLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var tableView: UITableView!
@@ -39,6 +40,28 @@ class ViewViewController: UIViewController {
         dateLabel.text = Self.dateFormatter.string(from: item!.date)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(didTapDelete))
+    }
+    
+    @IBAction func didTapSaveButton() {
+        if let text = textField.text, !text.isEmpty {
+            
+            let taskToAdd = TinyTask()
+            taskToAdd.task = text
+            let tasks : [TinyTask] = [taskToAdd]
+//
+            realm.beginWrite()
+//
+//            let newItem = TinyTasksItem()
+//            newItem.date = date
+            item?.tasks.append(objectsIn: tasks)
+//            newItem.item = text
+//            realm.add(newItem)
+            try! realm.commitWrite()
+            tableView.reloadData()
+        }
+        else {
+            print("Add something")
+        }
     }
     
     @objc func didTapDelete() {
