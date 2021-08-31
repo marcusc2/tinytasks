@@ -1,17 +1,18 @@
 //
-//  EntryViewController.swift
-//  TinyTasks
+//  TaskEntryViewController.swift
+//  tinytasks
 //
-//  Created by Marcus Christerson on 8/4/21.
+//  Created by Marcus Christerson on 8/31/21.
 //
 
 import RealmSwift
 import UIKit
 
-class EntryViewController: UIViewController, UITextFieldDelegate {
+class TaskEntryViewController: UIViewController, UITextFieldDelegate {
+    
+    public var item: List<TinyTask>?
     
     @IBOutlet var textField: UITextField!
-    @IBOutlet var datePicker: UIDatePicker!
     
     private let realm = try! Realm()
     public var completionHandler: (() -> Void)?
@@ -21,8 +22,6 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
 
         textField.becomeFirstResponder()
         textField.delegate = self
-        
-        datePicker.setDate(Date(), animated: true)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "save", style: .done, target: self, action: #selector(didTapSaveButton))
     }
@@ -34,19 +33,18 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
     
     @objc func didTapSaveButton() {
         if let text = textField.text, !text.isEmpty {
-            let date = datePicker.date
             
-//            let taskToAdd = TinyTask()
-//            taskToAdd.task = "Skydive"
-//            let tasks : [TinyTask] = [taskToAdd]
-            
+            let taskToAdd = TinyTask()
+            taskToAdd.task = text
+            let tasks : [TinyTask] = [taskToAdd]
+//
             realm.beginWrite()
-            
-            let newItem = TinyTasksItem()
-            newItem.date = date
-            //newItem.tasks.append(objectsIn: tasks)
-            newItem.item = text
-            realm.add(newItem)
+//
+//            let newItem = TinyTasksItem()
+//            newItem.date = date
+            item?.append(objectsIn: tasks)
+//            newItem.item = text
+//            realm.add(newItem)
             try! realm.commitWrite()
             
             completionHandler?()
@@ -56,7 +54,5 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
             print("Add something")
         }
     }
-    
-    
 
 }

@@ -11,7 +11,7 @@ import UIKit
 class TinyTasksItem: Object {
     @objc dynamic var item: String = ""
     @objc dynamic var date: Date = Date()
-    let tasks = List<TinyTask>()
+    var tasks = List<TinyTask>()
 }
 
 class TinyTask: Object {

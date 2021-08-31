@@ -12,8 +12,7 @@ class ViewViewController: UIViewController {
 
     public var item: TinyTasksItem?
     public var deletionHandler: (() -> Void)?
-
-    @IBOutlet var textField: UITextField!
+    
     @IBOutlet var itemLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var tableView: UITableView!
@@ -28,40 +27,38 @@ class ViewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // **
-        
+ 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
-        
-        // **
-
+   
         itemLabel.text = item?.item
         dateLabel.text = Self.dateFormatter.string(from: item!.date)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(didTapDelete))
     }
     
-    @IBAction func didTapSaveButton() {
-        if let text = textField.text, !text.isEmpty {
-            
-            let taskToAdd = TinyTask()
-            taskToAdd.task = text
-            let tasks : [TinyTask] = [taskToAdd]
-//
-            realm.beginWrite()
-//
-//            let newItem = TinyTasksItem()
-//            newItem.date = date
-            item?.tasks.append(objectsIn: tasks)
-//            newItem.item = text
-//            realm.add(newItem)
-            try! realm.commitWrite()
-            tableView.reloadData()
+    @IBAction func didTapAddButton() {
+
+        guard let vc = storyboard?.instantiateViewController(identifier: "entertask") as? TaskEntryViewController else {
+            return
         }
-        else {
-            print("Add something")
+
+        vc.item = item?.tasks
+        vc.completionHandler = { [weak self] in
+            self?.refresh()
         }
+        
+        vc.navigationItem.largeTitleDisplayMode = .never
+        //vc.title = item.item
+        navigationController?.pushViewController(vc, animated: true)
+        
+        item?.tasks = vc.item!
+        tableView.reloadData()
+
+    }
+
+    func refresh() {
+        tableView.reloadData()
     }
     
     @objc func didTapDelete() {
