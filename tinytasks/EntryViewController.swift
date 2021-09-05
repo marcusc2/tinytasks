@@ -11,6 +11,7 @@ import UIKit
 class EntryViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var textField: UITextField!
+    @IBOutlet var descriptionField: UITextField!
     @IBOutlet var datePicker: UIDatePicker!
     
     private let realm = try! Realm()
@@ -21,6 +22,9 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
 
         textField.becomeFirstResponder()
         textField.delegate = self
+        
+        descriptionField.becomeFirstResponder()
+        descriptionField.delegate = self
         
         datePicker.setDate(Date(), animated: true)
         
@@ -34,18 +38,15 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
     
     @objc func didTapSaveButton() {
         if let text = textField.text, !text.isEmpty {
+            let description = descriptionField.text
             let date = datePicker.date
-            
-//            let taskToAdd = TinyTask()
-//            taskToAdd.task = "Skydive"
-//            let tasks : [TinyTask] = [taskToAdd]
             
             realm.beginWrite()
             
-            let newItem = TinyTasksItem()
-            newItem.date = date
-            //newItem.tasks.append(objectsIn: tasks)
+            let newItem = TinyTasksProject()
             newItem.item = text
+            newItem.itemDescription = description ?? ""
+            newItem.date = date
             realm.add(newItem)
             try! realm.commitWrite()
             

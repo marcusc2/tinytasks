@@ -13,6 +13,7 @@ class TaskEntryViewController: UIViewController, UITextFieldDelegate {
     public var item: List<TinyTask>?
     
     @IBOutlet var textField: UITextField!
+    @IBOutlet var timeField: UITextField!
     
     private let realm = try! Realm()
     public var completionHandler: (() -> Void)?
@@ -22,6 +23,9 @@ class TaskEntryViewController: UIViewController, UITextFieldDelegate {
 
         textField.becomeFirstResponder()
         textField.delegate = self
+        
+        timeField.becomeFirstResponder()
+        timeField.delegate = self
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "save", style: .done, target: self, action: #selector(didTapSaveButton))
     }
@@ -33,22 +37,19 @@ class TaskEntryViewController: UIViewController, UITextFieldDelegate {
     
     @objc func didTapSaveButton() {
         if let text = textField.text, !text.isEmpty {
+            let time = timeField.text
             
             let taskToAdd = TinyTask()
             taskToAdd.task = text
+            taskToAdd.time = time ?? ""
             let tasks : [TinyTask] = [taskToAdd]
-//
+            
             realm.beginWrite()
-//
-//            let newItem = TinyTasksItem()
-//            newItem.date = date
             item?.append(objectsIn: tasks)
-//            newItem.item = text
-//            realm.add(newItem)
             try! realm.commitWrite()
             
             completionHandler?()
-            navigationController?.popToRootViewController(animated: true)
+            navigationController?.popViewController(animated: true)
         }
         else {
             print("Add something")
