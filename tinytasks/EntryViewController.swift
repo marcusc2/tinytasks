@@ -38,23 +38,17 @@ class EntryViewController: UIViewController, UITextFieldDelegate {
     
     @objc func didTapSaveButton() {
         if let text = textField.text, !text.isEmpty {
-            let description = descriptionField.text
-            let date = datePicker.date
             
             realm.beginWrite()
-            
             let newItem = TinyTasksProject()
             newItem.item = text
-            newItem.itemDescription = description ?? ""
-            newItem.date = date
+            newItem.itemDescription = descriptionField.text ?? ""
+            newItem.date = datePicker.date
             realm.add(newItem)
             try! realm.commitWrite()
             
             completionHandler?()
             navigationController?.popToRootViewController(animated: true)
-        }
-        else {
-            print("Add something")
         }
     }
     

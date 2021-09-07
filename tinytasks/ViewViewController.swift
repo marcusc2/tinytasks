@@ -16,6 +16,7 @@ class ViewViewController: UIViewController {
     @IBOutlet var itemLabel: UILabel!
     @IBOutlet var descriptionLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
 
     @IBOutlet var tableView: UITableView!
 
@@ -54,6 +55,19 @@ class ViewViewController: UIViewController {
             
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
+    }
+    
+    func sumTotalTime() -> Int {
+        var sum = 0
+        for task in item!.tasks {
+            let taskTime = Int(task.time) ?? 0
+            sum += taskTime
+        }
+        return sum
+    }
+    
+    func minutesToHoursAndMinutes (_ minutes : Int) -> (hours : Int , minutes : Int) {
+        return (minutes / 60, (minutes % 60))
     }
     
     // User adds a project. Instantiates TaskEntryViewController
@@ -98,14 +112,21 @@ extension ViewViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "cell")
+    
+        // Set to the sum of the tasks times
+        let totalTime = minutesToHoursAndMinutes(sumTotalTime())
+        if (totalTime.hours != 0) {
+            timeLabel?.text = "Total time: " + String(totalTime.hours) + "h " + String(totalTime.minutes) + "m"
+        } else {
+            timeLabel?.text = "Total time: " + String(totalTime.minutes) + "m"
+        }
         
         let item = item?.tasks[indexPath.row]
-        let itemTask = item?.task ?? ""
         let itemTime = item?.time
         
-        cell.textLabel?.text = itemTask
+        cell.textLabel?.text = item?.task ?? ""
         if (!itemTime!.isEmpty) {
-            cell.detailTextLabel?.text = "~" + itemTime! + "m"
+            cell.detailTextLabel?.text = itemTime! + "m"
         } else {
             cell.detailTextLabel?.text = ""
         }

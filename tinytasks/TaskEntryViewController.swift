@@ -51,9 +51,6 @@ class TaskEntryViewController: UIViewController, UITextFieldDelegate {
             completionHandler?()
             navigationController?.popViewController(animated: true)
         }
-        else {
-            print("Add something")
-        }
     }
 
 }
